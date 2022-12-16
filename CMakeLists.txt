@@ -6,5 +6,5 @@ set(CMAKE_C_STANDARD 99)
 set(GCC_COVERAGE_COMPILE_FLAGS "-no-pie")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 #add_executable(ass3 main.c run_main.s)
-add_executable(ass3 run_main-test.c func_select.s main.c)
+add_executable(ass3  main.c pstring.s)#run_main-test.c func_select.s
 #add_executable(ass3 main.c)

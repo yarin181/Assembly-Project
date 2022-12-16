@@ -12,7 +12,7 @@
 .text	#the beginnig of the code
 
 .globl	run_func	#the label "main" is used to state the initial point of this program
-	.type	main, @function	# the label "main" representing the beginning of a function
+	//.type	main, @function	# the label "main" representing the beginning of a function
 run_func:
     movq %rsp, %rbp #for correct debugging	# the main function:
 	pushq	%rbp		#save the old frame pointer
