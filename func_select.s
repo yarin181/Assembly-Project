@@ -1,13 +1,16 @@
-	.data
+.data
 
-
-	.section	.rodata			#read only data section
-    .jump_table:
-        .quad .opt_31
-        .quad .opt_32_33
-        .quad .opt_35
-        .quad .opt_36
-        .quad .opt_37
+.section	.rodata			#read only data section
+invalid_option:    .string "invalid option!\n"
+opt_31_string:     .string "first pstring length: %d, second pstring length: %d\n"
+.jump_table:
+    .quad .opt_31
+    .quad .opt_32_33
+    .quad .opt_32_33
+    .quad .invalid_option
+    .quad .opt_35
+    .quad .opt_36
+    .quad .opt_37
 	########
 .text	#the beginnig of the code
 
@@ -18,54 +21,42 @@ run_func:
 	pushq	%rbp		#save the old frame pointer
 	movq	%rsp, %rbp	#create the new frame pointer
 	pushq	%rbx		#saving a callee save register.
+	push    %r8
 
     ##opt in rdi , p1 in rsi , p2 in rdx
     #leaq -31(%rdi),%rsi
-     cmpq   $34,%rdi
-     je .Error
-     cmpq   $32,%rdi
-     je .32_33
-     cmpq   $33,%rdi
-     je .32_33
-     cmp    $31,%rdi
-     je .31
-     jb .Error
-     cmp    $38,%rdi
-     jae    .Error
-    jmp .continue
-    .32_33:
-        movq $34,%rdi
-        jmp .continue
-    .31:
-        movq $33,%rdi
-    .continue:
-        leaq   -33(%rdi),%rsi
-        jmp    .jump_table(,%rsi,8)
+    movq   %rdi,%r8   #storing the foption in r8 register.
+    cmpq   $31,%r8
+    jb     .invalid_option
+    cmpq   $37,%r8
+    ja     .invalid_option
 
-    .opt_31:
-        movq $31,%rax
-        jmp .End
-    .opt_32_33:
-        #33_32
-        movq $32,%rax
-        jmp .End
-    .opt_35:
-        movq $34,%rax
-        jmp .End
-    .opt_36:
-        movq $36,%rax
-        jmp .End
-    .opt_37:
-        #37
-        movq $37,%rax
-        jmp .End
-    .Error:
-        movq $38,%rax
+    movq    $0,%r10
+    leaq   -31(%r8),%r10
+    jmp    .jump_table(,%r10,8)
 
-        #print invalid number.
+.opt_31:
+    movq
+    call pstlen
+    jmp .End
+.opt_32_33:
+    movq $32,%rax
+    jmp .End
+.opt_35:
+    movq $34,%rax
+    jmp .End
+.opt_36:
+    movq $36,%rax
+    jmp .End
+.opt_37:
+    movq $37,%rax
+    jmp .End
+.invalid_option:
+    movq $invalid_option,%rdi
+    movq  $0,%rax
+    call  printf
 .End:
-
-
+    popq    %r8
 	movq	$0, %rax      	#return value is zero.
 	movq	-8(%rbp), %rbx	#restoring the save register (%rbx) value, for the caller function.
 	movq	%rbp, %rsp	#restore the old stack pointer - release all used memory.
