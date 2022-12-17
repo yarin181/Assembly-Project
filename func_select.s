@@ -1,13 +1,13 @@
 	.data
+
+
+	.section	.rodata			#read only data section
     .jump_table:
         .quad .opt_31
         .quad .opt_32_33
         .quad .opt_35
         .quad .opt_36
         .quad .opt_37
-
-	.section	.rodata			#read only data section
-
 	########
 .text	#the beginnig of the code
 
