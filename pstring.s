@@ -2,22 +2,23 @@
 
 	.section	.rodata			#read only data section
 invalid: .string "invalid input!\n"
+
 .text
 
 .globl	pstrlen
 	.type	pstrlen, @function	# the label "main" representing the beginning of a function
 pstrlen:
-    movq %rsp, %rbp #for correct debugging	# the main function:
+   // movq    %rsp, %rbp
     pushq	%rbp		#save the old frame pointer
     movq	%rsp, %rbp	#create the new frame pointer
-    pushq	%rbx		#saving a callee save register.
+    //pushq	%rbx		#saving a callee save register.
 
 
-    movq    $0,%rax
     movq   (%rdi),%r10
+    movq    $0,%rax
     movb    %r10b,%al
 
-	movq	-8(%rbp), %rbx	#restoring the save register (%rbx) value, for the caller function.
+	//movq	-8(%rbp), %rbx	#restoring the save register (%rbx) value, for the caller function.
 	movq	%rbp, %rsp	#restore the old stack pointer - release all used memory.
 	popq	%rbp		#restore old frame pointer (the caller function frame)
 	ret			#return to caller function (OS).
@@ -25,7 +26,7 @@ pstrlen:
 .global replaceChar
     .type	replaceChar, @function
 replaceChar:
-    movq %rsp, %rbp #for correct debugging	# the main function:
+    //movq    %rsp, %rbp
     pushq	%rbp		#save the old frame pointer
     movq	%rsp, %rbp	#create the new frame pointer
 
@@ -48,7 +49,7 @@ replaceChar:
 .global pstrijcpy
 	.type	pstrijcpy, @function
 pstrijcpy:
-    movq %rsp, %rbp #for correct debugging	# the main function:
+    //movq    %rsp, %rbp #for correct debugging	# the main function:
     pushq	%rbp		#save the old frame pointer
     movq	%rsp, %rbp	#create the new frame pointer
 
@@ -143,9 +144,11 @@ swapCase:
 .global pstrijcmp
     .type	pstrijcmp, @function
 pstrijcmp:
-     movq %rsp, %rbp #for correct debugging	# the main function:
+     //movq %rsp, %rbp #for correct debugging	# the main function:
      pushq	%rbp		#save the old frame pointer
      movq	%rsp, %rbp	#create the new frame pointer
+     pushq  %r12        #save calee save register
+     pushq  $0x43
 
     #p1 in rdi,p2 in rsi, i in rdx ,j in rcx
     movq    $0,%r8
@@ -192,7 +195,8 @@ pstrijcmp:
     call  printf
     movq    $-2,%rax
 .End_c:
-
+     pop    %r11
+     pop    %r12        #restore the value of r12
      movq	%rbp, %rsp	#restore the old stack pointer - release all used memory.
      popq	%rbp		#restore old frame pointer (the caller function frame)
      ret			#return to caller function (OS).

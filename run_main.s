@@ -12,7 +12,7 @@ string:	.string	"%s"
 .globl	run_main	#the label "main" is used to state the initial point of this program
 	.type	main, @function	# the label "main" representing the beginning of a function
 run_main:
-    movq %rsp, %rbp #for correct debugging	# the main function:
+    //movq %rsp, %rbp #for correct debugging	# the main function:
 	pushq	%rbp		#save the old frame pointer
 	movq	%rsp, %rbp	#create the new frame pointer
 	pushq	%rbx		#saving a callee save register.
