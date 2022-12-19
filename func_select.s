@@ -46,10 +46,10 @@ run_func:
     jmp    *.jump_table(,%r10,8)
 
 .opt_31:
-    movq    %rdx,%r12              #put the adrrse of p2 in r12(calee saved).
-    movq    %rsi,%rdi               #put p1 as the function argument.
+    movq    %r12,%rdi               #put p1 as the function argument.
     call    pstrlen
     movq    %rax,%rbx               #put the return value of the function in calee save register.
+    movq    %r13,%rdi               #put p2 as the function argument.
     call    pstrlen
     movq    $opt_31_string,%rdi     #put the output format as the first argument.
     movq    %rbx,%rsi               #put the p1 as the 2 argument.
@@ -98,8 +98,8 @@ run_func:
     call    scanf               #scan the secound decimal
     movq    %r12,%rdi           #p1 as the first argument
     movq    %r13,%rsi           #p2 as the secound argument
-    movq    (%rsp),%rdx         #put the start index as the 3 argument.
-    movq    8(%rsp),%rcx        #put the end index as the 4 argument.
+    movsbq    (%rsp),%rdx         #put the start index as the 3 argument.
+    movsbq    8(%rsp),%rcx        #put the end index as the 4 argument.
     call    pstrijcpy
     movq    $length_string,%rdi
     movsbq   (%r12),%rsi         #put the string length as the first argument.
@@ -142,8 +142,8 @@ run_func:
     call    scanf               #scan the secound decimal
     movq    %r12,%rdi           #p1 as the first argument
     movq    %r13,%rsi           #p2 as the secound argument
-    movq    (%rsp),%rdx         #put the start index as the 3 argument.
-    movq    8(%rsp),%rcx        #put the end index as the 4 argument.
+    movsbq    (%rsp),%rdx         #put the start index as the 3 argument.
+    movsbq    8(%rsp),%rcx        #put the end index as the 4 argument.
     leaq    16(%rsp),%rsp       #dealocate 16 bytes
     call    pstrijcmp
     movq    %rax,%rsi

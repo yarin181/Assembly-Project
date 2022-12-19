@@ -83,11 +83,11 @@ pstrijcpy:
     inc     %rdx
     jmp     .loop_start
 .Error:
-    movq $invalid,%rdi
-    movq  $0,%rax
-    call  printf
-    movq  $0,%rax
-    jmp   .End_func
+    movq    $invalid,%rdi
+    movq    $0,%rax
+    call    printf
+    movq    $0,%rax
+    jmp     .End_func
 .End_loop:
     movq    %rdi,%rax   #store the return value in rax.
 .End_func:

@@ -4,7 +4,7 @@
 
 int main() {
 
-
+ /*
        Pstring p1;
        p1.len = 4;
        strcpy(p1.str,"aabc");
@@ -12,7 +12,7 @@ int main() {
        p2.len = 10;
        strcpy(p2.str,"abcd");
        run_func(37,&p1,&p2);
-   /*
+
        //int x,y=6;
 
        printf("p1: %s\n",p1.str);
