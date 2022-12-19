@@ -97,12 +97,20 @@ run_func:
     leaq    8(%rsp),%rsi
     call    scanf               #scan the secound decimal
     movq    %r12,%rdi           #p1 as the first argument
-    movq    %r13,%rdi           #p2 as the secound argument
+    movq    %r13,%rsi           #p2 as the secound argument
     movq    (%rsp),%rdx         #put the start index as the 3 argument.
-    movq    8(%rsp),%rdx        #put the end index as the 4 argument.
+    movq    8(%rsp),%rcx        #put the end index as the 4 argument.
     call    pstrijcpy
-
-
+    movq    $opt_35_string,%rdi
+    movsbq    (%r12),%rsi         #put the string length as the first argument.
+    leaq    1(%r12),%rdx        #put the string as the secound argument.
+    movq    $0,%rax
+    call    printf
+    movq    $opt_35_string,%rdi
+    movsbq    (%r13),%rsi         #put the string length as the first argument.
+    leaq    1(%r13),%rdx        #put the string as the secound argument.
+    movq    $0,%rax
+    call    printf
     leaq    16(%rsp),%rsp   #dealocate 16 bytes
     jmp .End
 .opt_36:

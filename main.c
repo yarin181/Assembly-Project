@@ -10,7 +10,7 @@ int main() {
        strcpy(p1.str,"abcdabcd");
        Pstring p2;
        p2.len = 10;
-       strcpy(p2.str,"abcdeabcde");
+       strcpy(p2.str,"0123456789");
        run_func(35,&p1,&p2);
    /*
        //int x,y=6;
