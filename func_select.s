@@ -3,7 +3,13 @@
 .section	.rodata			#read only data section
 invalid_option:    .string "invalid option!\n"
 opt_31_string:     .string "first pstring length: %d, second pstring length: %d\n"
+opt_32_33_string:  .string "old char: %c, new char: %c, first string: %s, second string: %s\n"
 char_scan:         .string " %c"
+decimal_scan:      .string "%d"
+opt_35_string:     .string "length: %d, string: %s\n"
+
+
+
 .jump_table:
     .quad .opt_31
     .quad .opt_32_33
@@ -18,14 +24,17 @@ char_scan:         .string " %c"
 .globl	run_func	#the label "main" is used to state the initial point of this program
 	//.type	main, @function	# the label "main" representing the beginning of a function
 run_func:
-   // movq %rsp, %rbp #for correct debugging	# the main function:
 	pushq	%rbp		#save the old frame pointer
 	movq	%rsp, %rbp	#create the new frame pointer
 	pushq	%rbx		#saving a callee save register.
-	push    %r8
+	push    %r12
+	push    %r13
+    push    %r14
 
     ##opt in rdi , p1 in rsi , p2 in rdx
     #leaq -31(%rdi),%rsi
+    movq    %rsi,%r12           #move p1 pointer to calee saved regiter.
+    movq    %rdx,%r13           #move p2 pointer to calee saved regiter.
     movq   %rdi,%r8   #storing the foption in r8 register.
     cmpq   $31,%r8
     jb     .invalid_option
@@ -38,7 +47,6 @@ run_func:
 
 .opt_31:
     movq    %rdx,%r12              #put the adrrse of p2 in r12(calee saved).
-
     movq    %rsi,%rdi               #put p1 as the function argument.
     call    pstrlen
     movq    %rax,%rbx               #put the return value of the function in calee save register.
@@ -52,19 +60,50 @@ run_func:
 .opt_32_33:
     leaq  -16(%rsp),%rsp        #allocate 16 byte on the stack.
     movq    $char_scan,%rdi     #put the char scan as the first argument.
-    leaq    (%rsp),%rsi       #set a value on the stack as the 2 argument.
+    leaq    (%rsp),%rsi         #set a value on the stack as the 2 argument.
     movq    $0,%rax
     call    scanf
     movq    $char_scan,%rdi
     leaq    1(%rsp),%rsi
     movq    $0,%rax
     call    scanf
-    movb    1(%rsp),%r13b
-
-    movq $32,%rax
-    jmp .End
+    movsbq  (%rsp),%rbx         #new char in rbx (calle saved)
+    movsbq  1(%rsp),%r14        #old char in r14 (calle saved)
+    movq    %r12,%rdi           #put p1 as the first argument.
+    movq    %rbx,%rsi           #put the old char as the 2 argument.
+    movq    %r14,%rdx           #put the new char as the 3 argument.
+    call    replaceChar
+    movq    %r13,%rdi           #put p2 as the first argument.
+    movq    %rbx,%rsi           #put the old char as the 2 argument.
+    movq    %r14,%rdx           #put the new char as the 3 argument
+    call    replaceChar
+    movq    $opt_32_33_string,%rdi   #put the string as the 1 argument
+    movq    %rbx,%rsi               #put the old char as the 2 argument.
+    movq    %r14,%rdx               #put the new char as the 3 argument
+    leaq    1(%r12),%rcx             #put the adreass of p1 string as the 4 argument
+    leaq    1(%r13),%r8              #put the adreass of p1 string as the 5 argument
+    movq    $0,%rax
+    call    printf
+    leaq    16(%rsp),%rsp   #dealocate 16 bytes
+    jmp     .End
 .opt_35:
-    movq $34,%rax
+    leaq    -16(%rsp),%rsp        #allocate 16 byte on the stack.
+    movq    $0,%rax
+    movq    $decimal_scan,%rdi
+    leaq    (%rsp),%rsi
+    call    scanf               #scan the first decimal
+    movq    $0,%rax
+    movq    $decimal_scan,%rdi
+    leaq    8(%rsp),%rsi
+    call    scanf               #scan the secound decimal
+    movq    %r12,%rdi           #p1 as the first argument
+    movq    %r13,%rdi           #p2 as the secound argument
+    movq    (%rsp),%rdx         #put the start index as the 3 argument.
+    movq    8(%rsp),%rdx        #put the end index as the 4 argument.
+    call    pstrijcpy
+
+
+    leaq    16(%rsp),%rsp   #dealocate 16 bytes
     jmp .End
 .opt_36:
     movq $36,%rax
@@ -77,9 +116,12 @@ run_func:
     movq  $0,%rax
     call  printf
 .End:
-    popq    %r8
+
+    popq    %r14            #restoring the save register for the caller function.
+    popq    %r13
+    popq    %r12
+	movq	-8(%rbp), %rbx
 	movq	$0, %rax      	#return value is zero.
-	movq	-8(%rbp), %rbx	#restoring the save register (%rbx) value, for the caller function.
-	movq	%rbp, %rsp	#restore the old stack pointer - release all used memory.
-	popq	%rbp		#restore old frame pointer (the caller function frame)
+	movq	%rbp, %rsp	    #restore the old stack pointer - release all used memory.
+	popq	%rbp		    #restore old frame pointer (the caller function frame)
 	ret

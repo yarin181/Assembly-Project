@@ -6,12 +6,12 @@ int main() {
 
 
        Pstring p1;
-       p1.len = 5;
-       strcpy(p1.str,"abcde");
+       p1.len = 8;
+       strcpy(p1.str,"abcdabcd");
        Pstring p2;
-       p2.len = 5;
-       strcpy(p2.str,"12345");
-       run_func(32,p1,p2);
+       p2.len = 10;
+       strcpy(p2.str,"abcdeabcde");
+       run_func(35,&p1,&p2);
    /*
        //int x,y=6;
 

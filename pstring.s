@@ -33,6 +33,7 @@ replaceChar:
     movq    $0,%r8
     movb  (%rdi),%r8b   #storing the string length in r8 register.
 .Loop_start:
+    cmp $0,%r8
     jz  .End            #continue if the value of r8 is zero and were iterate all over the string.
     cmp    (%rdi,%r8),%sil  #compare the value of sil(the old char) to the current char.
     jne     .not_equal
@@ -44,7 +45,7 @@ replaceChar:
 
     movq	%rbp, %rsp	#restore the old stack pointer - release all used memory.
     popq	%rbp		#restore old frame pointer (the caller function frame)
-    ret			#return to caller function (OS).
+    ret
 
 .global pstrijcpy
 	.type	pstrijcpy, @function
@@ -100,7 +101,7 @@ pstrijcpy:
 .global swapCase
     .type	swapCase, @function
 swapCase:
-     movq %rsp, %rbp #for correct debugging	# the main function:
+     //movq %rsp, %rbp #for correct debugging	# the main function:
      pushq	%rbp		#save the old frame pointer
      movq	%rsp, %rbp	#create the new frame pointer
 
