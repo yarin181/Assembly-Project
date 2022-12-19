@@ -1,23 +1,62 @@
-	.data
+.data
 a:	.quad	1000
 
 
-	.section	.rodata			#read only data section
-format:	.string	"%x !\n"	 
-intger:  .string "%d"    
-string:	.string	"%s"
-	########
-	.text	#the beginnig of the code
+.section	.rodata			#read only data section
+format:	.string	"%x !\n"
+scan_intger:  .string "%d"
+scan_string:	.string	"%s"
 
-.globl	run_main	#the label "main" is used to state the initial point of this program
-	.type	main, @function	# the label "main" representing the beginning of a function
+.text
+
+.globl	run_main
+	.type	main, @function
 run_main:
-    //movq %rsp, %rbp #for correct debugging	# the main function:
 	pushq	%rbp		#save the old frame pointer
 	movq	%rsp, %rbp	#create the new frame pointer
-	pushq	%rbx		#saving a callee save register.
-        
-        
+
+    leaq    -256(%rsp),%rsp     #allocate 256 bytes on the stack for p1.
+    movq    $0,%rax
+    movq    $scan_intger,%rdi
+    leaq    (%rsp),%rsi
+    call    scanf              #read the first pstring length.
+    movq    $0,%rax
+    movq    $scan_string,%rdi
+    leaq    1(%rsp),%rsi
+    call    scanf              #read the first pstring string.
+
+    leaq    -256(%rsp),%rsp     #allocate 256 bytes on the stack for p2.
+    movq    $0,%rax
+    movq    $scan_intger,%rdi
+    leaq    (%rsp),%rsi
+    call    scanf              #read the first pstring length.
+    movq    $0,%rax
+    movq    $scan_string,%rdi
+    leaq    1(%rsp),%rsi
+    call    scanf              #read the first pstring string.
+
+
+
+    leaq    256(%rsp),%rsi
+    leaq    (%rsp),%rdx
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	movq	$intger,%rdi	#the string is the first paramter passed to the printf function.
 	leaq    -8(%rsp),%rsp     #allocate eight byte on the stack.
     leaq    4(%rsp),%rsi      #set the nuncer of chars in rsi
@@ -62,10 +101,8 @@ run_main:
     call    scanf
 
     movb    %r13b,(%rsp)
-                                        
+
 	movq	$0, %rax      	#return value is zero.
-	movq	-8(%rbp), %rbx	#restoring the save register (%rbx) value, for the caller function.
 	movq	%rbp, %rsp	#restore the old stack pointer - release all used memory.
 	popq	%rbp		#restore old frame pointer (the caller function frame)
 	ret			#return to caller function (OS).
-
