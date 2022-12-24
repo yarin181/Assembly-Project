@@ -66,8 +66,8 @@ run_func:
     leaq    1(%rsp),%rsi            #set a value on the stack as the 2 argument.
     movq    $0,%rax
     call    scanf
-    movsbq  (%rsp),%rbx             #new char in rbx (calle saved)
-    movsbq  1(%rsp),%r14            #old char in r14 (calle saved)
+    movzbq  (%rsp),%rbx             #new char in rbx (calle saved)
+    movzbq  1(%rsp),%r14            #old char in r14 (calle saved)
     movq    %r12,%rdi               #put p1 as the first argument.
     movq    %rbx,%rsi               #put the old char as the 2 argument.
     movq    %r14,%rdx               #put the new char as the 3 argument.
@@ -97,16 +97,16 @@ run_func:
     call    scanf                   #scan the secound decimal
     movq    %r12,%rdi               #p1 as the first argument
     movq    %r13,%rsi               #p2 as the secound argument
-    movsbq  (%rsp),%rdx           #put the start index as the 3 argument.
-    movsbq  8(%rsp),%rcx          #put the end index as the 4 argument.
+    movzbq  (%rsp),%rdx           #put the start index as the 3 argument.
+    movzbq  8(%rsp),%rcx          #put the end index as the 4 argument.
     call    pstrijcpy
     movq    $length_string,%rdi
-    movsbq  (%r12),%rsi            #put the string length as the first argument.
+    movzbq  (%r12),%rsi            #put the string length as the first argument.
     leaq    1(%r12),%rdx            #put the string as the secound argument.
     movq    $0,%rax
     call    printf
     movq    $length_string,%rdi
-    movsbq  (%r13),%rsi             #put the string length as the first argument.
+    movzbq  (%r13),%rsi             #put the string length as the first argument.
     leaq    1(%r13),%rdx            #put the string as the secound argument.
     movq    $0,%rax
     call    printf
@@ -118,12 +118,12 @@ run_func:
     movq    %r13,%rdi               #put p1 as the first argument for the swap case function.
     call    swapCase
     movq    $length_string,%rdi
-    movsbq  (%r12),%rsi             #put the string length as the first argument.
+    movzbq  (%r12),%rsi             #put the string length as the first argument.
     leaq    1(%r12),%rdx            #put the string as the secound argument.
     movq    $0,%rax
     call    printf
     movq    $length_string,%rdi
-    movsbq  (%r13),%rsi             #put the string length as the first argument.
+    movzbq  (%r13),%rsi             #put the string length as the first argument.
     leaq    1(%r13),%rdx            #put the string as the secound argument.
     movq    $0,%rax
     call    printf
@@ -141,8 +141,8 @@ run_func:
     call    scanf                 #scan the secound decimal
     movq    %r12,%rdi             #p1 as the first argument
     movq    %r13,%rsi             #p2 as the secound argument
-    movsbq  (%rsp),%rdx         #put the start index as the 3 argument.
-    movsbq  8(%rsp),%rcx        #put the end index as the 4 argument.
+    movzbq  (%rsp),%rdx         #put the start index as the 3 argument.
+    movzbq  8(%rsp),%rcx        #put the end index as the 4 argument.
     leaq    16(%rsp),%rsp         #dealocate 16 bytes
     call    pstrijcmp
     movq    %rax,%rsi             #set the function return value as the 2 argument.

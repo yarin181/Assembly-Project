@@ -60,9 +60,9 @@ pstrijcpy:
     js      .Error
     cmp     $0,%rcx             # sould be 0<=i
     js      .Error
-    cmp     %r8,%rcx            #length of the first and the scound string sould be smaller than j.
+    cmp     %r8,%rcx            #length of the first and the scound string sould be greater than j.
     jge     .Error
-    cmp     %r9,%rcx            #length of the first and the scound string sould be smaller than j.
+    cmp     %r9,%rcx            #length of the first and the scound string sould be greater than j.
     jge     .Error
 
 

@@ -37,7 +37,7 @@ run_main:
     movq    $scan_intger,%rdi   #put scan templet as the first first argument.
     leaq    (%rsp),%rsi         #put the adress for the intger as the 2 argumnt.
     call    scanf
-    movsbq  (%rsp),%rdi         #put the scaned value as the first argument in run_func function.
+    movzbq  (%rsp),%rdi         #put the scaned value as the first argument in run_func function.
     leaq    16(%rsp),%rsp       #deallocate bytes.
 
     leaq    256(%rsp),%rsi      #put p1 as the first argument.
