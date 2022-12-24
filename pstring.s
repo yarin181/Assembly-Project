@@ -47,6 +47,8 @@ replaceChar:
 pstrijcpy:
     pushq	%rbp		        #save the old frame pointer
     movq	%rsp, %rbp	        #create the new frame pointer
+    pushq   %r12                #backup calle save register.
+    pushq   %r13
 
     #p1 in rdi,p2 in rsi, i in rdx ,j in rcx
     movq    $0,%r8
@@ -54,6 +56,7 @@ pstrijcpy:
     movq    $0,%r9
     movb    (%rsi),%r9b         #storing the secound string length in r9 register.
     movq    $0,%r10             #init the r10 for future use.
+    movq    %rdi,%r12           #put the dst in a calle saved registe.
 
    #input validation
     cmp     %rdx,%rcx           #comare between j and i  should be i<=j
@@ -79,11 +82,14 @@ pstrijcpy:
     movq    $invalid,%rdi       #put the invalid templet as the first argument for printf.
     movq    $0,%rax
     call    printf              #print an invalid message.
-    movq    $0,%rax
+    movq    %r12,%rax
     jmp     .End_func
 .End_loop:
     movq    %rdi,%rax           #store the return value in rax.
 .End_func:
+
+    popq    %r13                #restore calee save regisers.
+    popq    %r12
     movq	%rbp, %rsp	        #restore the old stack pointer - release all used memory.
     popq	%rbp		        #restore old frame pointer (the caller function frame)
     ret
@@ -168,8 +174,8 @@ pstrijcmp:
     movb    (%rsi,%rdx),%r12b      #put p2 char in the i index value in r12
 
     cmp    %r11,%r12              #comare between the two char.
-    jb     .p1_big                #if p1[i] > p2[i] p1 is bigger
-    jg     .p2_big                #if p1[i] < p2[i] p2 is bigger
+    jg     .p1_big                #if p1[i] > p2[i] p1 is bigger
+    jb     .p2_big                #if p1[i] < p2[i] p2 is bigger
     jmp    .loop_c
 
 .p1_big:
