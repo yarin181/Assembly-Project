@@ -174,8 +174,8 @@ pstrijcmp:
     movb    (%rsi,%rdx),%r12b      #put p2 char in the i index value in r12
 
     cmp    %r11,%r12              #comare between the two char.
-    jg     .p1_big                #if p1[i] > p2[i] p1 is bigger
-    jb     .p2_big                #if p1[i] < p2[i] p2 is bigger
+    jb     .p1_big                #if p1[i] > p2[i] p1 is bigger
+    jg     .p2_big                #if p1[i] < p2[i] p2 is bigger
     jmp    .loop_c
 
 .p1_big:
