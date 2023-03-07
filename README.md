@@ -1,4 +1,4 @@
-# String Manipulation in Assembly 
+# String Manipulation in Assembly 📟
 
 This project is a program written in the assembly language, that allows users to make some manipulation strings. The program provides various string manipulation functions such as concatenation, substring, and comparison.
 
